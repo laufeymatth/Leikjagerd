@@ -1,55 +1,86 @@
 //gerum teiknicontextið
-var cvs = document.getElementById('leikjagerð');
+var cvs = document.getElementById('tetris');
 var ctx = cvs.getContext('2d');
 
+const COLS = 10;
+const ROWS = 20;
+const BLOCK_SIZE = 30;
 
-var number_of_platforms = 2;
-var platforms = [];
+// Calculate size of canvas from constants.
+ctx.canvas.width = COLS * BLOCK_SIZE;
+ctx.canvas.height = ROWS * BLOCK_SIZE;
+
+//byr til tómann kassa
+ctx.fillStyle = '#000';
+ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
 
-//ætla að "harð kóða" þetta seinna þegar við erum komin með designið svo ég viti hvar þeir eiga að vera - Laufey
-/*function createPlatform(){
-	for (i = 0; i < number_of_platforms; i++){
-		x: 100 * i,
-        y: 200 + (30 * i),
-        width: 110,
-        height: 15
+// Scale blocks
+ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
+
+
+const matrix = [
+	[0,0,0],
+	[1,1,1],
+	[0,1,0],
+]
+
+
+function draw_shape(matrix, hreyfing){
+	matrix.forEach((row, y) => {
+		row.forEach((value, x) => {
+			if (value !== 0) {
+				ctx.fillStyle = 'red';
+				ctx.fillRect(x + hreyfing.x, y + hreyfing.y, 1, 1);
+			}
+		});
+	});
+}
+
+
+
+const placement = {
+	staðsetning: {x:5, y:0},
+	matrix:matrix,
+}
+
+
+function draw (){
+	//tæmir kassan, tekur út gömlu staðsetninguna
+	ctx.fillStyle = '#000';
+	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+	//færir formið einum neðar
+	placement.staðsetning.y += 1;
+	//teiknar formið á nýja staðnum
+	draw_shape(placement.matrix, placement.staðsetning)
+}
+
+document.addEventListener('keydown', færa_kubb);
+
+function færa_kubb(e){
+	if (event.key === "ArrowLeft"){
+		placement.staðsetning.x -= 1;
+	}else if (event.key === "ArrowRight"){
+		placement.staðsetning.x += 1;
+	}else if (event.key === "ArrowDown"){
+		placement.staðsetning.y += 1;
 	}
-}*/
-
-
-//kóðinn sem teiknar inn platformana -Laufey
-function renderplat(){
-    ctx.fillStyle = "#45597E";
-    ctx.fillRect(platforms[0].x, platforms[0].y, platforms[0].width, platforms[0].height);
-    ctx.fillRect(platforms[1].x, platforms[1].y, platforms[1].width,platforms[1]. height);
-    ctx.fillRect(platforms[2].x, platforms[2].y, platforms[2].width,platforms[2]. height);
-    ctx.fillRect(platforms[3].x, platforms[3].y, platforms[3].width,platforms[3]. height);
 }
 
 
 
-//tutorialið sem er linkur nr 2 á doc-inu gerir svona loop thing
-function loop() {
 
-
-
-	//kóðinn sem tékkar hvort það sé collision -Laufey
-    let i = -1;
-    if(platforms[0].x < player.x && player.x < platforms[0].x + platforms[0].width && platforms[0].y < player.y && player.y < platforms[0].y + platforms[0].height){
-            i = 0;
-        }
-    if(platforms[1].x < player.x && player.x < platforms[1].x + platforms[1].width && platforms[1].y < player.y && player.y < platforms[1].y + platforms[1].height){
-            i = 1;
-        }
-    /*if (i > -1){
-        player.jump = false;
-        player.y = platforms[i].y;    
-    }*/
-    renderplat();
+function createMatrix(width, height){
+	const matrix = [];
+	var i = 0;
+	while (i < height){
+		matrix.push(new Array(width).fill(0));
+		i++;
+	}
+	return matrix;
 }
 
+const arena = createMatrix(10,20);
+console.log(arena); console.table(arena);
 
-document.addEventListener("keydown",keydown);
-document.addEventListener("keyup",keyup);
-setInterval(loop,22);
+var game = setInterval(draw, 500);

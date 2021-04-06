@@ -7,23 +7,43 @@
 </head>
 <body>
 
-	<canvas width="608" height="608" id="leikjagerð"></canvas>
-	<script type="text/javascript" src="index.js"></script>
-	<style>
-		canvas {
-			/*til að sjá canvasið :))
-			background-color:pink;
-			*/
+<div class="grid">
+  <canvas id="tetris" class="game-board"></canvas>
+  <script src="tetris_index.js"></script>
+  <div class="right-column">
+    <div>
+      <h1>TETRIS</h1>
+      <p>Score: <span id="score">0</span></p>
+      <p>Lines: <span id="lines">0</span></p>
+      <p>Level: <span id="level">0</span></p>
+      <canvas id="next" class="next"></canvas>
+    </div>
+    <button onclick="play()" class="play-button">Play</button>
+  </div>
+</div>
 
-			/*til að center-a canvasið */
-		    padding-left: 0;
-		    padding-right: 0;
-		    margin-left: auto;
-		    margin-right: auto;
-		    display: block;
-		    width: 800px;
-		}
-	</style>
+<style>
+	.grid {
+	  display: grid;
+	  grid-template-columns: 320px 200px;
+	}
 
+	.right-column {
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: space-between;
+	}
+
+	.game-board {
+	  border: solid 2px;
+	}
+
+	.play-button {
+	  background-color: #4caf50;
+	  font-size: 16px;
+	  padding: 15px 30px;
+	  cursor: pointer;
+	}
+</style>
 </body>
 </html>
