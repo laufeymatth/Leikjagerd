@@ -3,14 +3,10 @@ const context = canvas.getContext('2d');
 
 var score = 0;
 var línur = 0;
+var hraði = 1000;
+var lvl = 1;
 
 context.scale(20, 20);
-//þetta lætur leikinn ekki loadast inn nema maður ýti á takkann
-/*window.onload=function(){
-	document.getElementById('button').addEventListener('click', function(){
-		update();
-	});
-}*/
 
 //hljóð
 var turn = new Audio();
@@ -56,6 +52,14 @@ function arenaSweep() {
 function draw_score (){
 	document.getElementById("score").innerHTML = score;
 	document.getElementById("lines").innerHTML = línur;	
+	document.getElementById("level").innerHTML = lvl;
+	if (score >= lvl*800){
+		hraði = hraði - 100;
+		if(hraði <= 100){
+			hraði = 100;
+		}
+		lvl++;
+	}
 }
 
 
@@ -197,6 +201,8 @@ function playerDrop() {
 			lose.play();
 			score = 0;
 			línur = 0;
+			hraði = 1000;
+			lvl = 1;
 		}
 	}
 
@@ -240,7 +246,7 @@ function playerDrop() {
 	time = { start: 0, liðinn: 0}
 	function update(now = 0) {
 		time.liðinn = now - time.start;
-		if (time.liðinn > 1000){
+		if (time.liðinn > hraði){
 			time.start = now;
 			playerDrop();
 
